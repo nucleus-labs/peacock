@@ -1,0 +1,39 @@
+
+body {
+    background-color: #363636;
+}
+
+div.row {
+
+}
+
+.container {
+    display: grid;
+}
+
+.container .main {
+    background-color: #363636;
+}
+
+#button-selectors {
+    height: 80px;
+    background-color: #868686;
+    grid-template-columns: 20%;
+}
+
+#button-selectors .col {
+    height: 60px;
+    background-color: #363636;
+}
+
+#button-selectors .col.green {
+    background-color: #a9d81d;
+    color: black;
+    height: .03;
+}
+
+#button-selectors .col p {
+    color: white;
+    font-size: 28px;
+    justify-content: center;
+}
