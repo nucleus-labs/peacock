@@ -3,8 +3,26 @@ name = "peacock"
 version = "0.1.0"
 edition = "2021"
 
+[features]
+build = []
+canvas3d = ["dep:iced_renderer", "dep:iced_wgpu", "dep:iced_tiny_skia"]
+
 [dependencies]
 derive_more = { version = "1.0.0", features = [ "from" ] }
 
-peacock-pinion = { git = "https://github.com/nucleus-labs/pinion", rev = "f2a59d821ac7cec1e7a8d307f1a9ffc9514634a0" }
-peacock-crest = {  git = "https://github.com/nucleus-labs/Crest",  rev = "1358d8bf06f4cb808b1d8d92fd4ee926bc89d41c" }
+peacock-pinion = { git = "https://github.com/nucleus-labs/pinion", rev = "fedf97d4813d5fa4597f22a5e863066bd92ed81f" }
+# peacock-pinion = { path = "../pinion" }
+peacock-crest = {  git = "https://github.com/nucleus-labs/Crest",  rev = "12750efbc5bfb3210d3f617b31138a392091be79" }
+# peacock-crest = { path = "../crest" }
+
+iced.version = "0.13.1"
+iced.features = ["advanced", "markdown", "webgl", "canvas"]
+
+iced_renderer.version = "0.13.0"
+iced_renderer.optional = true
+
+iced_wgpu.version = "0.13.5"
+iced_wgpu.optional = true
+
+iced_tiny_skia.version = "0.13.0"
+iced_tiny_skia.optional = true

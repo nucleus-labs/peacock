@@ -27,6 +27,8 @@
             atkmm
             pango
             gtk3-x11
+
+            openssl_3_3
           ];
           LD_LIBRARY_PATH = "$LD_LIBRARY_PATH:${
             lib.makeLibraryPath [
