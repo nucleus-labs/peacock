@@ -1,0 +1,9 @@
+[submodule "crest"]
+	path = crest
+	url = https://github.com/nucleus-labs/Crest/
+[submodule "pinion"]
+	path = pinion
+	url = https://github.com/nucleus-labs/pinion/
+[submodule "ocelli"]
+	path = ocelli
+	url = https://github.com/nucleus-labs/peacock-ocelli

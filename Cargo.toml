@@ -1,28 +1,47 @@
 [package]
-name = "peacock"
-version = "0.1.0"
-edition = "2021"
+    name = "peacock"
+    version = "0.1.0"
+    authors = ["Maxine Alexander <Max.Alexander3721@gmail.com>"]
+    edition = "2021"
 
 [features]
-build = []
-canvas3d = ["dep:iced_renderer", "dep:iced_wgpu", "dep:iced_tiny_skia"]
+    build = ["dep:glob", "dep:peacock-pinion", "dep:peacock-crest"]
+    wgpu = ["iced/wgpu", "dep:iced_renderer", "dep:iced_wgpu", "dep:iced_tiny_skia"]
+    perf = []
 
 [dependencies]
-derive_more = { version = "1.0.0", features = [ "from" ] }
+    glob = { version = "0.3.1", optional = true }
+    peacock-pinion = { workspace = true, optional = true }
+    peacock-crest = { workspace = true, optional = true }
+    iced.workspace = true
+    iced_renderer = { version = "0.13.0", optional = true }
+    iced_wgpu = { version = "0.13.5", optional = true }
+    iced_tiny_skia = { version = "0.13.0", optional = true }
 
-peacock-pinion = { git = "https://github.com/nucleus-labs/pinion", rev = "fedf97d4813d5fa4597f22a5e863066bd92ed81f" }
-# peacock-pinion = { path = "../pinion" }
-peacock-crest = {  git = "https://github.com/nucleus-labs/Crest",  rev = "12750efbc5bfb3210d3f617b31138a392091be79" }
-# peacock-crest = { path = "../crest" }
+[workspace]
+    members = [
+        "pinion",
+        "crest",
+        "ocelli",
+        "examples/*"
+        ]
+        [workspace.dependencies.peacock]
+            default-features = true
+            version = "0.1.0"
+            path = "."
 
-iced.version = "0.13.1"
-iced.features = ["advanced", "markdown", "webgl", "canvas"]
+        [workspace.dependencies.peacock-pinion]
+            version = "0.1.0"
+            path = "pinion"
 
-iced_renderer.version = "0.13.0"
-iced_renderer.optional = true
+        [workspace.dependencies.peacock-crest]
+            version = "0.1.0"
+            path = "crest"
 
-iced_wgpu.version = "0.13.5"
-iced_wgpu.optional = true
+        [workspace.dependencies.peacock-ocelli]
+            version = "0.1.0"
+            path = "ocelli"
 
-iced_tiny_skia.version = "0.13.0"
-iced_tiny_skia.optional = true
+        [workspace.dependencies.iced]
+            version = "0.13.1"
+            features = ["advanced", "markdown", "webgl", "canvas"]

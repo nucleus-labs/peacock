@@ -1,0 +1,13 @@
+[package]
+name = "basic"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[build-dependencies]
+peacock.workspace = true
+peacock.features = ["build"]
+
+[dependencies]
+peacock.workspace = true
+iced.workspace = true

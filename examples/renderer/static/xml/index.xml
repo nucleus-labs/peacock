@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Container id="teapot-main">
+    <Column>
+        <Row>
+            <Slider label="Yaw"   id="teapot-yaw"   min="0" max="360" />
+            <Slider label="Pitch" id="teapot-pitch" min="0" max="360" />
+            <Slider label="Roll"  id="teapot-roll"  min="0" max="360" />
+        </Row>
+        <Container id="teapot-renderer-holder">
+            <Renderer id="teapot-renderer" />
+        </Container>
+    </Column>
+</Container>
