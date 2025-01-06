@@ -1,9 +1,13 @@
+use peacock::api::{ApplicationContext, AsyncHandle};
 
-mod widgets {
-    include!(concat!(env!("OUT_DIR"), "/widgets-gen.rs"));
-}
+type AsyncApp = AsyncHandle<ApplicationContext<()>>;
 
-fn main() -> iced::Result {
-    let app = peacock::api::ApplicationContext::<()>::new("Basic Peacock App", widgets::gen_index::<()>);
-    peacock::api::ApplicationContext::run(app)
+fn main() -> peacock::api::Result {
+    let app: AsyncApp = ApplicationContext::new("Basic Peacock App");
+    {
+        let mut app_guard = app.write().unwrap();
+        app_guard.read_css_auto();
+        app_guard.read_xml_auto();
+    }
+    ApplicationContext::run(app)
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Container id="teapot-main">
+<Container id="teapot-main" xmlns:Ocelli="fake.com/ocelli" >
     <Column>
         <Row>
             <Slider label="Yaw"   id="teapot-yaw"   min="0" max="360" />
@@ -7,7 +7,8 @@
             <Slider label="Roll"  id="teapot-roll"  min="0" max="360" />
         </Row>
         <Container id="teapot-renderer-holder">
-            <Renderer id="teapot-renderer" />
+            <!--<Ocelli:Renderer id="teapot-renderer" />-->
+            <Text id="dummy">Placeholder</Text>
         </Container>
     </Column>
 </Container>

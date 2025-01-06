@@ -7,6 +7,286 @@
         {
             "type": "lldb",
             "request": "launch",
+            "name": "Debug unit tests in library 'peacock_pinion'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--lib",
+                    "--package=peacock-pinion"
+                ],
+                "filter": {
+                    "name": "peacock_pinion",
+                    "kind": "lib"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'basic'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=basic",
+                    "--package=peacock-pinion"
+                ],
+                "filter": {
+                    "name": "basic",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'basic'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=basic",
+                    "--package=peacock-pinion"
+                ],
+                "filter": {
+                    "name": "basic",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in library 'peacock_crest'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--lib",
+                    "--package=peacock-crest"
+                ],
+                "filter": {
+                    "name": "peacock_crest",
+                    "kind": "lib"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'acid'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=acid",
+                    "--package=peacock-crest"
+                ],
+                "filter": {
+                    "name": "acid",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'acid'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=acid",
+                    "--package=peacock-crest"
+                ],
+                "filter": {
+                    "name": "acid",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'crest_basic'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=crest_basic",
+                    "--package=peacock-crest"
+                ],
+                "filter": {
+                    "name": "crest_basic",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'crest_basic'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=crest_basic",
+                    "--package=peacock-crest"
+                ],
+                "filter": {
+                    "name": "crest_basic",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'pest'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=pest",
+                    "--package=peacock-crest"
+                ],
+                "filter": {
+                    "name": "pest",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'pest'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=pest",
+                    "--package=peacock-crest"
+                ],
+                "filter": {
+                    "name": "pest",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug integration test 'acid'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--test=acid",
+                    "--package=peacock-crest"
+                ],
+                "filter": {
+                    "name": "acid",
+                    "kind": "test"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug integration test 'basic'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--test=basic",
+                    "--package=peacock-crest"
+                ],
+                "filter": {
+                    "name": "basic",
+                    "kind": "test"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug benchmark 'css'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bench=css",
+                    "--package=peacock-crest"
+                ],
+                "filter": {
+                    "name": "css",
+                    "kind": "bench"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'basic'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=basic",
+                    "--package=basic"
+                ],
+                "filter": {
+                    "name": "basic",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 'basic'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=basic",
+                    "--package=basic"
+                ],
+                "filter": {
+                    "name": "basic",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
             "name": "Debug unit tests in library 'peacock'",
             "cargo": {
                 "args": [
@@ -18,6 +298,191 @@
                 "filter": {
                     "name": "peacock",
                     "kind": "lib"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'calculator'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=calculator",
+                    "--package=calculator"
+                ],
+                "filter": {
+                    "name": "calculator",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 'calculator'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=calculator",
+                    "--package=calculator"
+                ],
+                "filter": {
+                    "name": "calculator",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'dynamic-behaviour'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=dynamic-behaviour",
+                    "--package=dynamic-behaviour"
+                ],
+                "filter": {
+                    "name": "dynamic-behaviour",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 'dynamic-behaviour'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=dynamic-behaviour",
+                    "--package=dynamic-behaviour"
+                ],
+                "filter": {
+                    "name": "dynamic-behaviour",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'dynamic-structure'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=dynamic-structure",
+                    "--package=dynamic-structure"
+                ],
+                "filter": {
+                    "name": "dynamic-structure",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 'dynamic-structure'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=dynamic-structure",
+                    "--package=dynamic-structure"
+                ],
+                "filter": {
+                    "name": "dynamic-structure",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'renderer'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=renderer",
+                    "--package=renderer"
+                ],
+                "filter": {
+                    "name": "renderer",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 'renderer'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=renderer",
+                    "--package=renderer"
+                ],
+                "filter": {
+                    "name": "renderer",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'widget-sandbox'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=widget-sandbox",
+                    "--package=widget-sandbox"
+                ],
+                "filter": {
+                    "name": "widget-sandbox",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 'widget-sandbox'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=widget-sandbox",
+                    "--package=widget-sandbox"
+                ],
+                "filter": {
+                    "name": "widget-sandbox",
+                    "kind": "bin"
                 }
             },
             "args": [],

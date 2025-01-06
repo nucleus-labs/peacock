@@ -10,7 +10,10 @@ use crate::build::WidgetContext;
 ///     - an ID - will error if not present
 ///     - raw inner text
 ///
-pub fn compose(node: NodeAsync, _widget_collection: &crate::build::WidgetCollection) -> WidgetContext {
+pub fn compose(
+    node: NodeAsync,
+    _widget_collection: &crate::build::WidgetCollection,
+) -> WidgetContext {
     let node_guard = node.read().unwrap();
 
     assert_eq!(node_guard.name, "Text");
@@ -30,7 +33,11 @@ pub fn compose(node: NodeAsync, _widget_collection: &crate::build::WidgetCollect
     let id = node_guard.attributes["id"].clone();
 
     let content = node_guard.text_content.clone().unwrap().trim().to_string();
-    let construction = format!("Box::new(widgets::BuilderText::new(\"{}\", \"{}\".into()))", id.clone(), content);
+    let construction = format!(
+        "Box::new(widgets::BuilderText::new(\"{}\", \"{}\".into()))",
+        id.clone(),
+        content
+    );
 
     WidgetContext {
         construction,

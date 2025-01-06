@@ -1,27 +1,32 @@
 use peacock_pinion::xml::NodeAsync;
 
+use selectors::SelectorImpl;
+
 use crate::build::WidgetContext;
 
 const VALID_CONTENTS: &[&'static str] = &["Text", "Image", "SVG"];
 
-pub fn compose(node: NodeAsync, widget_collection: &crate::build::WidgetCollection) -> WidgetContext {
+pub fn compose<T: SelectorImpl>(
+    node: NodeAsync<T>,
+    widget_collection: &crate::build::WidgetCollection,
+) -> WidgetContext {
     let node_guard = node.read().unwrap();
 
-    assert_eq!(node_guard.name, "Button");
+    assert_eq!(node_guard.name.to_lowercase(), "button");
     assert!(
         node_guard.children.len() < 2,
         "Buttons cannot have more than one child!"
     );
     assert!(
-        node_guard.attributes.contains_key("id"),
+        node_guard.has_attribute("Default", "id"),
         "Buttons require an `id` attribute!"
     );
     assert!(
-        !node_guard.attributes["id"].is_empty(),
+        !node_guard.get_attribute("Default", "id").is_empty(),
         "Buttons require a non-empty `id` attribute!"
     );
 
-    let id = node_guard.attributes["id"].clone();
+    let id = node_guard.get_attribute("Default", "id")[0].clone();
 
     let button_content: String = if node_guard.children.is_empty() {
         assert!(node_guard.text_content.is_some());

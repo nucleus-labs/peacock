@@ -8,10 +8,3 @@ pub mod api;
 
 #[cfg(feature = "build")]
 pub mod build;
-
-pub struct DisabledFeature;
-
-impl DisabledFeature {
-    #[allow(dead_code)]
-    fn new() -> Self { Self{} }
-}

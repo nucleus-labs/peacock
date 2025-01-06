@@ -1,3 +1,4 @@
+use crate::api::{Element, ElementBuilder};
 
 #[derive(Clone)]
 pub struct BuilderText {
@@ -7,19 +8,20 @@ pub struct BuilderText {
 
 impl BuilderText {
     pub fn new(id: &'static str, content: String) -> Self {
-        Self{
-            id,
-            content,
-        }
+        Self { id, content }
     }
 }
 
-impl<'a> super::ElementBuilder<'a> for BuilderText {
-    fn build(&self) -> super::Element<'a> {
+impl<'a> ElementBuilder<'a> for BuilderText {
+    fn build(&self) -> Element<'a> {
         iced::widget::text(self.content.clone()).into()
     }
 
-    fn clone_box(&self) -> Box<dyn super::ElementBuilder<'a>> {
+    fn clone_box(&self) -> Box<dyn ElementBuilder<'a>> {
         Box::new(self.clone())
     }
 }
+
+// unsafe impl Send for BuilderText {
+
+// }

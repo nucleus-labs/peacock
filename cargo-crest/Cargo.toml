@@ -1,0 +1,13 @@
+[package]
+name = "cargo-crest"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+clap = { version = "4.5.23", features = ["derive"] }
+glob = "0.3.1"
+toml = "0.8.19"
+
+[[bin]]
+name = "cargo-crest"
+path = "src/main.rs"

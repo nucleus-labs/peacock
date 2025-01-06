@@ -2,11 +2,18 @@ use peacock_pinion::xml::NodeAsync;
 
 use crate::build::WidgetContext;
 
-pub fn compose(node: NodeAsync, widget_collection: &crate::build::WidgetCollection) -> WidgetContext {
+pub fn compose(
+    node: NodeAsync,
+    widget_collection: &crate::build::WidgetCollection,
+) -> WidgetContext {
     let node_guard = node.read().unwrap();
 
     assert_eq!(node_guard.name, "Container");
-    assert_eq!(node_guard.children.len(), 1, "Container must have exactly one child!");
+    assert_eq!(
+        node_guard.children.len(),
+        1,
+        "Container must have exactly one child!"
+    );
     assert!(
         node_guard.attributes.contains_key("id"),
         "Containers require an `id` attribute!"
@@ -22,7 +29,7 @@ pub fn compose(node: NodeAsync, widget_collection: &crate::build::WidgetCollecti
 
     let construction = format!("Box::new(widgets::BuilderContainer::new(\"{id}\", {contents}))");
 
-    WidgetContext{
+    WidgetContext {
         construction,
         id: Some(id),
     }

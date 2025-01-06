@@ -8,7 +8,7 @@ publish = false
 peacock.workspace = true
 peacock.features = ["build"]
 peacock-pinion.workspace = true
-peacock-ocelli.workspace = true
+# peacock-ocelli.workspace = true
 
 [dependencies]
 peacock = { workspace = true, features = ["wgpu"]}

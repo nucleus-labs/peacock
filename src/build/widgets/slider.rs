@@ -2,7 +2,10 @@ use peacock_pinion::xml::NodeAsync;
 
 use crate::build::WidgetContext;
 
-pub fn compose(node: NodeAsync, _widget_collection: &crate::build::WidgetCollection) -> WidgetContext {
+pub fn compose(
+    node: NodeAsync,
+    _widget_collection: &crate::build::WidgetCollection,
+) -> WidgetContext {
     let node_guard = node.read().unwrap();
 
     assert_eq!(node_guard.name, "Slider");
@@ -31,13 +34,18 @@ pub fn compose(node: NodeAsync, _widget_collection: &crate::build::WidgetCollect
     let min = node_guard.attributes["min"].clone();
     let max = node_guard.attributes["max"].clone();
 
-    let min_num = min.parse::<f32>().expect(format!("Failed to parse '{min}' as a number").as_str());
-    let max_num = max.parse::<f32>().expect(format!("Failed to parse '{max}' as a number").as_str());
+    let min_num = min
+        .parse::<f32>()
+        .expect(format!("Failed to parse '{min}' as a number").as_str());
+    let max_num = max
+        .parse::<f32>()
+        .expect(format!("Failed to parse '{max}' as a number").as_str());
     let default_num = if node_guard.attributes.contains_key("default") {
         let default = node_guard.attributes["default"].clone();
-        default.parse::<f32>().expect(format!("Failed to parse '{default}' as a number").as_str())
-    }
-    else {
+        default
+            .parse::<f32>()
+            .expect(format!("Failed to parse '{default}' as a number").as_str())
+    } else {
         min_num.clone()
     };
 

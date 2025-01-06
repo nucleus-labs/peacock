@@ -11,9 +11,10 @@
       in
       {
         devShell = with pkgs; mkShell {
-          packages = with pkgs; [
+          packages = [
             valgrind-light
             clippy
+            wasm-bindgen-cli
           ];
 
           buildInputs = [
@@ -30,6 +31,10 @@
 
             openssl_3_3
           ];
+          nativeBuildInputs = [
+            # llvmPackages_12.lld
+            # llvmPackages_12.libcxxClang
+          ];
           LD_LIBRARY_PATH = "$LD_LIBRARY_PATH:${
             lib.makeLibraryPath [
               xorg.libX11
@@ -42,6 +47,8 @@
           }";
 
           RUST_SRC_PATH = rustPlatform.rustLibSrc;
+          # RUSTFLAGS = "-C linker=lld";
+          # CC = "${llvmPackages_12.libcxxClang}";
         };
       }
     );
