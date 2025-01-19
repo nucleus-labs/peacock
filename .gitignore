@@ -1,6 +1,7 @@
 
 /target
 massif.out.*
+cachegrind.out.*
 .direnv/
 
 # Added by cargo

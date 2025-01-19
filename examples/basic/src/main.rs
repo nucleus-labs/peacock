@@ -1,13 +1,17 @@
-use peacock::api::{ApplicationContext, AsyncHandle};
+use peacock::ApplicationContext;
+use minijinja::context;
 
-type AsyncApp = AsyncHandle<ApplicationContext<()>>;
+#[derive(Default)]
+struct MyState {
+    // ...
+}
 
-fn main() -> peacock::api::Result {
-    let app: AsyncApp = ApplicationContext::new("Basic Peacock App");
-    {
-        let mut app_guard = app.write().unwrap();
-        app_guard.read_css_auto();
-        app_guard.read_xml_auto();
-    }
+fn main() -> peacock::Result {
+    let mut app: ApplicationContext<MyState> = ApplicationContext::new("Basic Peacock App");
+
+    app.read_css_auto()?;
+    app.read_xml_templates_auto()?;
+    app.render_template_to_registry("index", "index".into(), context!{})?;
+
     ApplicationContext::run(app)
 }

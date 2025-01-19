@@ -17,10 +17,10 @@
     iced_renderer = { version = "0.13.0", optional = true }
     iced_wgpu = { version = "0.13.5", optional = true }
     iced_tiny_skia = { version = "0.13.0", optional = true }
-selectors = "0.26.0"
-cssparser = "0.34.0"
-derive_more = { version = "1.0.0", features = ["deref", "from", "from_str"] }
-minijinja = "2.5.0"
+    selectors = "0.26.0"
+    cssparser = "0.34.0"
+    derive_more = { version = "1.0.0", features = ["deref", "from", "from_str"] }
+    minijinja = "2.5.0"
 
 [workspace]
     members = [

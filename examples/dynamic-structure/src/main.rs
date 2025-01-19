@@ -5,7 +5,7 @@ fn main() -> peacock::api::Result {
         app_guard.widget_registry.write().unwrap().insert(
             "button".into(),
             Box::new(peacock::api::widgets::BuilderButton::new(
-                "button",
+                "button".into(),
                 Box::new(peacock::api::widgets::BuilderText::new(
                     "text",
                     "Welcome to the dynamic structure Peacock example!".into(),
