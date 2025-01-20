@@ -29,7 +29,7 @@ pub enum Error {
 
 pub struct ApplicationContext<State: Default> {
     title: &'static str,
-    state: State,
+    state: AsyncHandle<State>,
     event_hooks: HashMap<String, Box<message::MessageReceiver<State>>>,
     
     stylesheet: AsyncHandle<peacock_crest::Stylesheet>,
@@ -49,13 +49,13 @@ fn view<State: Default + 'static>(ctx: &ApplicationContext<State>) -> Element<'_
 }
 
 impl<State: Default + 'static> ApplicationContext<State> {
-    pub fn new(title: &'static str) -> Self {
+    pub fn new_with_state(title: &'static str, initial_state: State) -> Self {
         let mut widget_registry: HashMap<String, widget::BoxedWidgetBuilder<State>> = HashMap::new();
         widget_registry.insert("pk-root".into(), widget::container::ContainerBuilder::new(Vec::new()));
 
         Self{
             title,
-            state: State::default(),
+            state: Arc::new(RwLock::new(initial_state)),
             event_hooks: HashMap::new(),
 
             stylesheet: Arc::new(RwLock::new(peacock_crest::Stylesheet::default())),
@@ -65,6 +65,10 @@ impl<State: Default + 'static> ApplicationContext<State> {
             root_id: "pk-root".into(),
             widget_registry,
         }
+    }
+
+    pub fn new(title: &'static str) -> Self {
+        Self::new_with_state(title, State::default())
     }
 
     pub fn add_css(&mut self, css: &str) -> std::result::Result<(), String> {
@@ -140,12 +144,11 @@ impl<State: Default + 'static> ApplicationContext<State> {
             .ok_or("Failed to find id attribute".to_string())?;
         let node_name = node_guard.name.to_lowercase();
 
-        println!("Registering '{node_name}' node with id '{node_id}'");
-
         match node_name.as_str() {
-            "container" => widget::container::ContainerBuilder::from_node(self, node)?,
             "button" => widget::button::ButtonBuilder::from_node(self, node)?,
-            "text" => widget::text::TextBuilder::from_node(self, node)?,
+            "container" => widget::container::ContainerBuilder::from_node(self, node)?,
+            "column" => widget::column::ColumnBuilder::from_node(self, node)?,
+            "text" | "text-content" => widget::text::TextBuilder::from_node(self, node)?,
 
             _ => panic!("Unknown element type '{node_name}'")
         };
@@ -177,9 +180,9 @@ impl<State: Default + 'static> ApplicationContext<State> {
         self.widget_registry.get(widget_id)
     }
 
-    pub fn run(ctx: Self) -> Result {
-        let app = iced::application(ctx.title, update, view);
-        match app.run_with(move || (ctx, iced::Task::none())) {
+    pub fn run(self) -> Result {
+        let app = iced::application(self.title, update, view);
+        match app.run_with(move || (self, iced::Task::none())) {
             Ok(_) => Ok(()),
             Err(err) => Err(err.into()),
         }

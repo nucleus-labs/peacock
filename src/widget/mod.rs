@@ -1,6 +1,7 @@
 
 pub mod container;
 pub mod button;
+pub mod column;
 pub mod text;
 
 pub type BoxedWidgetBuilder<State> = Box<dyn ElementBuilder<State>>;

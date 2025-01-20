@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Button id="button">
-    <Button id="button2">
-        <Text id="text">Welcome to the basic Peacock example!</Text>
+<Container>
+    This is a test
+    <Button id="button">
+        Welcome to the basic Peacock example!
     </Button>
-</Button>
+    and this
+    <Button id="button2">
+        Welcome to the basic Peacock example!
+    </Button>
+    is another
+    <Button id="button3">
+        Welcome to the basic Peacock example!
+    </Button>
+    test
+</Container>

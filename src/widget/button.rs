@@ -17,17 +17,22 @@ impl ButtonBuilder {
         let node_id = node_guard.get_attribute("Default", "id")
             .ok_or("Failed to find id attribute".to_string())?;
         
-        let mut child_ids: Vec<String> = Vec::new();
-        for child in node_guard.children.iter() {
-            let child_id = ctx.register_node_as_widget(child)
-                .map_err(|e: crate::Error| format!("Failed to register node: '{e}'"))?;
-            child_ids.push(child_id);
+        if node_guard.children.len() == 1 {
+            let mut child_ids: Vec<String> = Vec::new();
+            for child in node_guard.children.iter() {
+                let child_id = ctx.register_node_as_widget(child)
+                    .map_err(|e: crate::Error| format!("Failed to register node: '{e}'"))?;
+                child_ids.push(child_id);
+            }
+
+            let new = Self::new(node_id.clone(), child_ids[0].clone());
+            ctx.widget_registry.insert(node_id, new);
+
+            Ok(())
+        } else {
+            Err("Buttons must have exactly one text element child or text content".to_string())
         }
 
-        let new = Self::new(node_id.clone(), child_ids[0].clone());
-        ctx.widget_registry.insert(node_id, new);
-
-        Ok(())
     }
 }
 

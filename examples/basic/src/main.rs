@@ -13,5 +13,5 @@ fn main() -> peacock::Result {
     app.read_xml_templates_auto()?;
     app.render_template_to_registry("index", "index".into(), context!{})?;
 
-    ApplicationContext::run(app)
+    app.run()
 }
