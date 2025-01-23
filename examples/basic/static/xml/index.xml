@@ -1,4 +1,2 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Button id="button">
-    Welcome to the basic Peacock example!
-</Button>
+<Button>Welcome to the basic Peacock example!</Button>

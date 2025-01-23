@@ -30,7 +30,7 @@ pub enum Error {
 pub struct ApplicationContext<State: Default> {
     title: &'static str,
     state: AsyncHandle<State>,
-    event_hooks: HashMap<String, Box<message::MessageReceiver<State>>>,
+    event_hooks: HashMap<String, AsyncHandle<Vec<Box<message::MessageReceiver<State>>>>>,
     
     stylesheet: AsyncHandle<peacock_crest::Stylesheet>,
     templates: AsyncHandle<peacock_pinion::TemplateStore<'static>>,
@@ -40,8 +40,14 @@ pub struct ApplicationContext<State: Default> {
     widget_registry: HashMap<String, widget::BoxedWidgetBuilder<State>>,
 }
 
-fn update<State: Default>(_ctx: &mut ApplicationContext<State>, _msg: message::MessageGeneric) {
-    
+fn update<State: Default + 'static>(ctx: &mut ApplicationContext<State>, msg: message::MessageGeneric) {
+    if ctx.event_hooks.contains_key(&msg.0) {
+        let receivers_handle = &ctx.event_hooks[&msg.0].clone();
+        let receivers = receivers_handle.read().unwrap();
+        for receiver in receivers.iter() {
+            (*receiver)(ctx, msg.clone())
+        }
+    }
 }
 
 fn view<State: Default + 'static>(ctx: &ApplicationContext<State>) -> Element<'_> {
@@ -156,10 +162,17 @@ impl<State: Default + 'static> ApplicationContext<State> {
         Ok(node_id.clone())
     }
 
-    pub fn render_template_to_registry(&mut self, template_name: &str, registry_id: String, context: minijinja::Value) -> Result {
-        let template = self.templates.read().unwrap().get(template_name.into());
+    pub fn render_template_to_registry(&mut self, template_name: String, registry_id: String, context: minijinja::Value) -> Result {
+        let template = self.templates.read().unwrap().get(&template_name);
         let xml = template.read().unwrap().render(context)?;
-        let xml_entry = self.xml_trees.write().unwrap().append_from_source(template_name.into(), xml)?;
+
+        let xml_entry = {
+            let mut tree_guard = self.xml_trees.write().unwrap();
+            if tree_guard.has(&template_name) {
+                tree_guard.remove(&template_name);
+            }
+            tree_guard.append_from_source(template_name, xml)?
+        };
 
         let mut toplevel_ids: Vec<String> = Vec::new();
         for node in xml_entry.read().unwrap().nodes.iter() {
@@ -176,8 +189,24 @@ impl<State: Default + 'static> ApplicationContext<State> {
         self.root_id = id;
     }
 
+    pub fn register_message_receiver(&mut self, id: String, receiver: Box<message::MessageReceiver<State>>) {
+        if !self.event_hooks.contains_key(&id) {
+            self.event_hooks.insert(id, Arc::new(RwLock::new(vec![receiver])));
+        } else {
+            self.event_hooks[&id].write().unwrap().push(receiver);
+        }
+    }
+
     pub fn get_widget<'a>(&'a self, widget_id: &str) -> Option<&'a widget::BoxedWidgetBuilder<State>> {
         self.widget_registry.get(widget_id)
+    }
+
+    pub fn set_widget<'a>(&'a mut self, widget_id: String, widget: widget::BoxedWidgetBuilder<State>) {
+        self.widget_registry.insert(widget_id, widget);
+    }
+
+    pub fn get_state(&self) -> AsyncHandle<State> {
+        self.state.clone()
     }
 
     pub fn run(self) -> Result {

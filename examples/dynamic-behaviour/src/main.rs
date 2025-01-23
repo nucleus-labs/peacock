@@ -1,29 +1,30 @@
-use peacock::api::{widgets, ApplicationContext, AsyncHandle, MessageGeneric, Task};
+use peacock::ApplicationContext;
+use minijinja::context;
 
-type AsyncApplication = AsyncHandle<ApplicationContext<u8>>;
-
-fn on_press(app: &mut AsyncApplication, _: MessageGeneric) -> Option<Task> {
-    let mut app_guard = app.write().unwrap();
-
-    *app_guard.get_state() += 1;
-
-    let new_content = format!("Pressed {} times!", app_guard.get_state());
-
-    let mut registry = app_guard.widget_registry.write().unwrap();
-    registry.insert(
-        "text".into(),
-        Box::new(widgets::BuilderText::new("text", new_content)),
-    );
-
-    None
+#[derive(Default)]
+struct MyState {
+    count: usize,
 }
 
-fn main() -> peacock::api::Result {
-    let app: AsyncApplication = ApplicationContext::new("Basic Peacock App");
-    {
-        let mut app_guard = app.write().unwrap();
-        app_guard.read_xml_auto();
-        app_guard.add_callback("button", on_press);
-    }
-    ApplicationContext::run(app)
+fn update_count(ctx: &mut ApplicationContext<MyState>, msg: peacock::message::MessageGeneric) {
+    ctx.get_state().write().unwrap().count += 1;
+
+    // assumption is safe because widgets send their identifier and if they don't exist that
+    // would be incredibly problematic...
+    let button = ctx.get_widget(&msg.0).unwrap();
+    let button_content_id = button.get_children()[0].clone();
+    let button_content = peacock::widget::text::TextBuilder::new(format!("Clicked {} times!", ctx.get_state().read().unwrap().count));
+    
+    ctx.set_widget(button_content_id, button_content);
+}
+
+fn main() -> peacock::Result {
+    let mut app: ApplicationContext<MyState> = ApplicationContext::new("Basic Peacock App");
+
+    app.read_xml_templates_auto()?;
+    app.render_template_to_registry("index".into(), "index".into(), context!{})?;
+
+    app.register_message_receiver("button".into(), Box::new(update_count));
+
+    app.run()
 }

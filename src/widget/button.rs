@@ -1,3 +1,4 @@
+use crate::message::{MessageGeneric, MessageGenericInner};
 
 pub struct ButtonBuilder {
     id: String,
@@ -32,7 +33,6 @@ impl ButtonBuilder {
         } else {
             Err("Buttons must have exactly one text element child or text content".to_string())
         }
-
     }
 }
 
@@ -40,7 +40,11 @@ impl<State: Default + 'static> super::ElementBuilder<State> for ButtonBuilder {
     fn build<'a>(&'a self, ctx: &'a crate::ApplicationContext<State>) -> crate::Element<'a> {
         let child = ctx.get_widget(&self.child_id).unwrap().build(ctx);
         iced::widget::button(child)
-            .on_press((self.id.clone(), crate::message::MessageGenericInner::Button))
+            .on_press(MessageGeneric(self.id.clone(), MessageGenericInner::Button))
             .into()
+    }
+    
+    fn get_children(&self) -> Vec<String> {
+        vec![self.child_id.clone()]
     }
 }

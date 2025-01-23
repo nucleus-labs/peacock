@@ -29,4 +29,8 @@ impl<State: Default + 'static> super::ElementBuilder<State> for TextBuilder {
     fn build<'a>(&'a self, _ctx: &'a crate::ApplicationContext<State>) -> crate::Element<'a> {
         iced::widget::text(&self.contents).into()
     }
+    
+    fn get_children(&self) -> Vec<String> {
+        Vec::new()
+    }
 }

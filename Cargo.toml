@@ -7,7 +7,11 @@
 [features]
     build = []
     wgpu = ["iced/wgpu", "dep:iced_renderer", "dep:iced_wgpu", "dep:iced_tiny_skia"]
+    canvas = ["iced/canvas"]
     perf = []
+
+[dev-dependencies]
+    criterion = "0.5.1"
 
 [dependencies]
     glob = { version = "0.3.1" }
@@ -21,7 +25,11 @@
     cssparser = "0.34.0"
     derive_more = { version = "1.0.0", features = ["deref", "from", "from_str"] }
     minijinja = "2.5.0"
-uuid = { version = "1.12.0", features = ["v4"] }
+    uuid = { version = "1.12.0", features = ["v4"] }
+
+[[bench]]
+    name = "basic"
+    harness = false
 
 [workspace]
     members = [

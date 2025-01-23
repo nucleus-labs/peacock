@@ -38,4 +38,8 @@ impl<State: Default + 'static> super::ElementBuilder<State> for ContainerBuilder
             .collect::<Vec<crate::Element<'a>>>();
         iced::widget::column(children).into()
     }
+    
+    fn get_children(&self) -> Vec<String> {
+        self.children.clone()
+    }
 }

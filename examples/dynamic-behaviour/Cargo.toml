@@ -11,3 +11,4 @@ peacock.features = ["build"]
 [dependencies]
 peacock.workspace = true
 iced.workspace = true
+minijinja = "2.5.0"

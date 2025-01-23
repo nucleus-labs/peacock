@@ -1,10 +1,10 @@
 
 #[derive(Debug)]
-pub struct ColumnBuilder {
+pub struct RowBuilder {
     pub children: Vec<String>,
 }
 
-impl ColumnBuilder {
+impl RowBuilder {
     pub fn new(children: Vec<String>) -> Box<Self> {
         Self{
             children,
@@ -30,7 +30,7 @@ impl ColumnBuilder {
     }
 }
 
-impl<State: Default + 'static> super::ElementBuilder<State> for ColumnBuilder {
+impl<State: Default + 'static> super::ElementBuilder<State> for RowBuilder {
     fn build<'a>(&'a self, ctx: &'a crate::ApplicationContext<State>) -> crate::Element<'a> {
         let children = self.children.iter()
             .map(|child_id| ctx.get_widget(child_id as &str).unwrap())
