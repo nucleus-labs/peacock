@@ -1164,6 +1164,7 @@ name = "dynamic-structure"
 version = "0.1.0"
 dependencies = [
  "iced",
+ "minijinja",
  "peacock",
 ]
 
