@@ -9,6 +9,7 @@ pub struct MessageGeneric(pub String, pub MessageGenericInner);
 pub enum MessageGenericInner {
     Button,
     Checkbox(bool),
+    // ...
 }
 
 /// Function for receiving messages produced by widgets.
