@@ -1,8 +1,8 @@
 [package]
     name = "peacock"
     description = "A cross-platform GUI framework that focuses on accessibility, modularity, and maintainability"
+    authors = ["Maxine Alexander <Max.Alexander3721@gmail.com>"]
     version.workspace = true
-    authors.workspace = true
     edition.workspace = true
     readme.workspace = true
     repository.workspace = true
@@ -50,7 +50,6 @@
     ]
         [workspace.package]
             version = "0.1.0"
-            authors = ["Maxine Alexander <Max.Alexander3721@gmail.com>"]
             edition = "2021"
             readme = "README.md"
             repository = "https://github.com/nucleus-labs/peacock"
