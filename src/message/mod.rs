@@ -15,4 +15,5 @@ pub enum MessageGenericInner {
 /// 
 /// These will be registered with the ApplicationContext and be called
 /// during the `update` function.
+#[allow(clippy::unused_unit)]
 pub type MessageReceiver<State> = dyn Fn(&mut super::ApplicationContext<State>, MessageGeneric) -> ();

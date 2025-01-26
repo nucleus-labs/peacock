@@ -11,6 +11,7 @@ pub mod canvas;
 pub mod text;
 pub mod row;
 
+/// convenience type alias
 pub type BoxedWidgetBuilder<State> = Box<dyn ElementBuilder<State>>;
 
 pub trait ElementBuilder<State: 'static> {
