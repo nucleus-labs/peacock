@@ -38,7 +38,7 @@ pub struct ApplicationContext<State> {
     xml_trees: AsyncHandle<peacock_pinion::XmlStore>,
 
     root_id: String,
-    widget_registry: HashMap<String, widget::BoxedWidgetBuilder<State>>,
+    widget_registry: HashMap<String, widget::BoxedElementBuilder<State>>,
 }
 
 fn update<State: 'static>(ctx: &mut ApplicationContext<State>, msg: message::MessageGeneric) {
@@ -56,8 +56,17 @@ fn view<State: 'static>(ctx: &ApplicationContext<State>) -> Element<'_> {
 }
 
 impl<State: 'static> ApplicationContext<State> {
+    /// Creates a new context with the given title and default user-defined state object
+    pub fn new(title: &'static str) -> Self
+    where
+        State: Default
+    {
+        Self::new_with_state(title, State::default())
+    }
+
+    /// Creates a new context with the given title and provided initial user-defined state object
     pub fn new_with_state(title: &'static str, initial_state: State) -> Self {
-        let mut widget_registry: HashMap<String, widget::BoxedWidgetBuilder<State>> = HashMap::new();
+        let mut widget_registry: HashMap<String, widget::BoxedElementBuilder<State>> = HashMap::new();
         widget_registry.insert("pk-root".into(), widget::container::ContainerBuilder::new(Vec::new()));
 
         Self{
@@ -74,13 +83,8 @@ impl<State: 'static> ApplicationContext<State> {
         }
     }
 
-    pub fn new(title: &'static str) -> Self
-    where
-        State: Default
-    {
-        Self::new_with_state(title, State::default())
-    }
-
+    /// parse the provided css string into a [`peacock_crest::Stylesheet`] and update the
+    /// context's application-wide stylesheet
     pub fn add_css(&mut self, css: &str) -> std::result::Result<(), String> {
         let mut new_style = css.parse::<peacock_crest::Stylesheet>()
             .map_err(|e| format!("Failed to parse CSS: {e}"))?
@@ -92,12 +96,15 @@ impl<State: 'static> ApplicationContext<State> {
         Ok(())
     }
 
+    /// read the file at the provided path, parse the contents into a [`peacock_crest::Stylesheet`]
+    /// and update the context's application-wide stylesheet
     pub fn read_css(&mut self, filepath: &std::path::Path) -> std::result::Result<(), String> {
         let file_contents = std::fs::read_to_string(filepath)
             .map_err(|e| format!("Failed to read CSS file '{filepath:?}': {e}"))?;
         self.add_css(&file_contents)
     }
     
+    /// automatically search for *.css files in 'static/css/' and pass the paths to [`Self::read_css`]
     pub fn read_css_auto(&mut self) -> std::result::Result<(), String> {
         let css_files = glob::glob("static/css/**/*.css").map_err(|e| format!("Glob pattern failed: {e}"))?;
 
@@ -115,6 +122,7 @@ impl<State: 'static> ApplicationContext<State> {
         Ok(())
     }
 
+    /// register the provided xml string with the template registry using `name` as the index
     pub fn add_xml_template(&mut self, name: &str, xml: &str) -> std::result::Result<(), String> {
         self.templates.write().unwrap().append_raw(name.into(), xml.into())
             .map_err(|e| format!("Failed to process XML source: {e}"))?;
@@ -122,6 +130,7 @@ impl<State: 'static> ApplicationContext<State> {
         Ok(())
     }
 
+    /// read the file at the provided path and register the contents with the template registry using `name` as the index
     pub fn read_xml_add_template(&mut self, name: &str, filepath: &std::path::Path) -> std::result::Result<(), String> {
         self.templates.write().unwrap().append_from_file(name.into(), filepath)
             .map_err(|e| format!("Failed to read XML file '{filepath:?}': {e}"))?;
@@ -129,6 +138,8 @@ impl<State: 'static> ApplicationContext<State> {
         Ok(())
     }
 
+    /// automatically search for *.xml files in 'static/xml/' and pass the paths to [`Self::read_xml_add_template`] with
+    /// the file's name as the template index
     pub fn read_xml_templates_auto(&mut self) -> std::result::Result<(), String> {
         let xml_files = glob::glob("static/xml/**/*.xml").map_err(|e| format!("Glob pattern failed: {e}"))?;
 
@@ -148,6 +159,8 @@ impl<State: 'static> ApplicationContext<State> {
         Ok(())
     }
 
+    /// attempt to convert a [`peacock_pinion::xml::NodeAsync`] DOM element to an object implementing the
+    /// [`widget::ElementBuilder`] trait based on the node's name
     pub(crate) fn register_node_as_widget(&mut self, node: &peacock_pinion::xml::NodeAsync) -> std::result::Result<String, Error> {
         let node_guard = node.read().unwrap();
         let node_id = node_guard.get_attribute("Default", "id")
@@ -166,6 +179,10 @@ impl<State: 'static> ApplicationContext<State> {
         Ok(node_id.clone())
     }
 
+    /// get the template whose index is `template_name` and render it to xml using `context` as the context.
+    /// Then parse the resulting XML string into a DOM element tree, and convert each of the tree's nodes to
+    /// an object implementing the [`widget::ElementBuilder`] trait, with the root element being registered
+    /// using `registry_id` as the index
     pub fn render_template_to_registry(&mut self, template_name: String, registry_id: String, context: minijinja::Value) -> Result {
         let template = self.templates.read().unwrap().get(&template_name);
         let xml = template.read().unwrap().render(context)?;
@@ -189,10 +206,17 @@ impl<State: 'static> ApplicationContext<State> {
         Ok(())
     }
 
+    /// in order to render the context into a GUI application, it references the widget in the widget registry
+    /// whose index is that of the context's root id. With this function you can change what ID is used, and as
+    /// such can change what gets rendered to the screen
     pub fn change_root_element_id(&mut self, id: String) {
         self.root_id = id;
     }
 
+    /// widgets may define types of events which are emitted as a `message` to the application itself, whether
+    /// they're a result of some user interaction or not. To update the state in response to these events, you
+    /// must subscribe to that widget's events with a function accepting the correct arguments. The `id` is the
+    /// id of the widget that you're subscribing to.
     pub fn register_message_receiver(&mut self, id: String, receiver: Box<message::MessageReceiver<State>>) {
         if !self.event_hooks.contains_key(&id) {
             self.event_hooks.insert(id, Arc::new(RwLock::new(vec![receiver])));
@@ -201,11 +225,11 @@ impl<State: 'static> ApplicationContext<State> {
         }
     }
 
-    pub fn get_widget<'a>(&'a self, widget_id: &str) -> Option<&'a widget::BoxedWidgetBuilder<State>> {
+    pub fn get_widget<'a>(&'a self, widget_id: &str) -> Option<&'a widget::BoxedElementBuilder<State>> {
         self.widget_registry.get(widget_id)
     }
 
-    pub fn set_widget<'a>(&'a mut self, widget_id: String, widget: widget::BoxedWidgetBuilder<State>) {
+    pub fn set_widget<'a>(&'a mut self, widget_id: String, widget: widget::BoxedElementBuilder<State>) {
         self.widget_registry.insert(widget_id, widget);
     }
 
