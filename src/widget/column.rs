@@ -11,7 +11,7 @@ impl ColumnBuilder {
         }.into()
     }
 
-    pub fn from_node<State: Default + 'static>(ctx: &mut crate::ApplicationContext<State>, node: &peacock_pinion::xml::NodeAsync) -> Result<(), String> {
+    pub fn from_node<State: 'static>(ctx: &mut crate::ApplicationContext<State>, node: &peacock_pinion::xml::NodeAsync) -> Result<(), String> {
         let node_guard = node.read().unwrap();
         let node_id = node_guard.get_attribute("Default", "id")
             .ok_or("Failed to find id attribute".to_string())?;
@@ -30,7 +30,7 @@ impl ColumnBuilder {
     }
 }
 
-impl<State: Default + 'static> super::ElementBuilder<State> for ColumnBuilder {
+impl<State: 'static> super::ElementBuilder<State> for ColumnBuilder {
     fn build<'a>(&'a self, ctx: &'a crate::ApplicationContext<State>) -> crate::Element<'a> {
         let children = self.children.iter()
             .map(|child_id| ctx.get_widget(child_id as &str).unwrap())

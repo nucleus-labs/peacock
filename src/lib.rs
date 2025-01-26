@@ -27,7 +27,7 @@ pub enum Error {
     PinionGeneric(peacock_pinion::Error),
 }
 
-pub struct ApplicationContext<State: Default> {
+pub struct ApplicationContext<State> {
     title: &'static str,
     state: AsyncHandle<State>,
     event_hooks: HashMap<String, AsyncHandle<Vec<Box<message::MessageReceiver<State>>>>>,
@@ -40,7 +40,7 @@ pub struct ApplicationContext<State: Default> {
     widget_registry: HashMap<String, widget::BoxedWidgetBuilder<State>>,
 }
 
-fn update<State: Default + 'static>(ctx: &mut ApplicationContext<State>, msg: message::MessageGeneric) {
+fn update<State: 'static>(ctx: &mut ApplicationContext<State>, msg: message::MessageGeneric) {
     if ctx.event_hooks.contains_key(&msg.0) {
         let receivers_handle = &ctx.event_hooks[&msg.0].clone();
         let receivers = receivers_handle.read().unwrap();
@@ -50,11 +50,11 @@ fn update<State: Default + 'static>(ctx: &mut ApplicationContext<State>, msg: me
     }
 }
 
-fn view<State: Default + 'static>(ctx: &ApplicationContext<State>) -> Element<'_> {
+fn view<State: 'static>(ctx: &ApplicationContext<State>) -> Element<'_> {
     ctx.get_widget(&ctx.root_id).unwrap().build(ctx)
 }
 
-impl<State: Default + 'static> ApplicationContext<State> {
+impl<State: 'static> ApplicationContext<State> {
     pub fn new_with_state(title: &'static str, initial_state: State) -> Self {
         let mut widget_registry: HashMap<String, widget::BoxedWidgetBuilder<State>> = HashMap::new();
         widget_registry.insert("pk-root".into(), widget::container::ContainerBuilder::new(Vec::new()));
@@ -73,7 +73,10 @@ impl<State: Default + 'static> ApplicationContext<State> {
         }
     }
 
-    pub fn new(title: &'static str) -> Self {
+    pub fn new(title: &'static str) -> Self
+    where
+        State: Default
+    {
         Self::new_with_state(title, State::default())
     }
 
@@ -220,7 +223,10 @@ impl<State: Default + 'static> ApplicationContext<State> {
 
 impl std::error::Error for Error {}
 
-impl<State: Default + 'static> std::default::Default for ApplicationContext<State> {
+impl<State: 'static> std::default::Default for ApplicationContext<State>
+where
+    State: Default
+{
     fn default() -> Self {
         Self::new("peacock app")
     }

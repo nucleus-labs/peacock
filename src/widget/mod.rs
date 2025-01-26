@@ -13,7 +13,7 @@ pub mod row;
 
 pub type BoxedWidgetBuilder<State> = Box<dyn ElementBuilder<State>>;
 
-pub trait ElementBuilder<State: Default + 'static> {
+pub trait ElementBuilder<State: 'static> {
     fn build<'a>(&'a self, ctx: &'a super::ApplicationContext<State>) -> super::Element<'a>;
     fn get_children(&self) -> Vec<String>;
 }

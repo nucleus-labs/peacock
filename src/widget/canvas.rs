@@ -7,7 +7,7 @@ impl CanvasBuilder {
 
 }
 
-impl<State: Default + 'static> super::ElementBuilder<State> for CanvasBuilder {
+impl<State: 'static> super::ElementBuilder<State> for CanvasBuilder {
     fn build<'a>(&'a self, ctx: &'a crate::ApplicationContext<State>) -> crate::Element<'a> {
         todo!()
     }
