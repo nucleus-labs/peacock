@@ -1,12 +1,9 @@
-#![allow(clippy::doc_lazy_continuation)]
 #![doc = include_str!("../README.md")]
 
-#[allow(clippy::doc_lazy_continuation)]
 #[doc = include_str!("../docs/widget/overview.md")]
 pub mod widget;
 
-#[allow(clippy::doc_lazy_continuation)]
-#[doc = include_str!("../docs/message/overview.md")]
+// #[doc = include_str!("../docs/message/overview.md")]
 pub mod message;
 
 pub use minijinja::context;
@@ -14,8 +11,11 @@ pub use minijinja::context;
 use std::collections::HashMap;
 use std::sync::{Arc, RwLock};
 
+/// a convenience alias
 pub type AsyncHandle<T> = Arc<RwLock<T>>;
+/// a convenience and simplicity alias
 pub type Element<'a> = iced::Element<'a, message::MessageGeneric>;
+/// a convenience alias
 pub type Result = std::result::Result<(), Error>;
 
 #[derive(Debug, derive_more::Display, derive_more::From)]
@@ -27,6 +27,7 @@ pub enum Error {
     PinionGeneric(peacock_pinion::Error),
 }
 
+#[doc = include_str!("../docs/application_context.md")]
 pub struct ApplicationContext<State: Default> {
     title: &'static str,
     state: AsyncHandle<State>,

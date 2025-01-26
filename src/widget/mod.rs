@@ -11,8 +11,12 @@ pub mod canvas;
 pub mod text;
 pub mod row;
 
+/// convenience type alias
 pub type BoxedWidgetBuilder<State> = Box<dyn ElementBuilder<State>>;
 
+/// A trait for objects that contain the context necessary for producing an [`iced::Element`],
+/// usually by building an object implementing the [`iced::advanced::Widget`] trait first and
+/// casting that to an iced Element.
 pub trait ElementBuilder<State: Default + 'static> {
     fn build<'a>(&'a self, ctx: &'a super::ApplicationContext<State>) -> super::Element<'a>;
     fn get_children(&self) -> Vec<String>;

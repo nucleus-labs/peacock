@@ -20,7 +20,7 @@ They are designed to:
 1. **Display Information**: Widgets can show text, images, or shapes.
 2. **Take Input**: Some widgets let users interact with them, like clicking a button or typing in a text field.
 3. **React to Actions**: Widgets can change or perform tasks when something happens, such as changing color
-when hovered over with a mouse.
+    when hovered over with a mouse.
 
 ---
 
@@ -40,7 +40,7 @@ Peacock takes care of turning those instructions into something users can see an
 
 For example:
 - You might use a **button** widget in XML, give it a label like "Click Me", and style it with CSS to
-make it blue.
+    make it blue.
 - Peacock uses this definition to create the actual button on the screen.
 
 ---
