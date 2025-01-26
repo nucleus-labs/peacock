@@ -840,6 +840,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "crest_basic"
+version = "0.1.0"
+dependencies = [
+ "peacock-crest",
+]
+
+[[package]]
 name = "criterion"
 version = "0.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"

@@ -52,6 +52,8 @@ avoiding unnecessary complexity.
 
 ## Quickstart
 
+### Installation
+
 Getting started with peacock is fairly straightforward! Peacock isn't published to crates.io since it's
 not out of pre-alpha, so you can't just run a Cargo command (yet) (unfortunately).
 
@@ -61,6 +63,8 @@ not out of pre-alpha, so you can't just run a Cargo command (yet) (unfortunately
 peacock = { git = "https://github.com/nucleus-labs/peacock", rev = "<rev>" }
 minijinja = "2.5.0"
 ```
+
+### Usage
 
 `main.rs`
 ```rust

@@ -1,8 +1,14 @@
 [package]
     name = "peacock"
-    version = "0.1.0"
-    authors = ["Maxine Alexander <Max.Alexander3721@gmail.com>"]
-    edition = "2021"
+    description = "A cross-platform GUI framework that focuses on accessibility, modularity, and maintainability"
+    version.workspace = true
+    authors.workspace = true
+    edition.workspace = true
+    readme.workspace = true
+    repository.workspace = true
+    license.workspace = true
+    keywords.workspace = true
+    categories.workspace = true
 
 [features]
     build = []
@@ -36,10 +42,22 @@
         "pinion",
         "crest",
         # "ocelli",
-        "examples/*",
         "cargo-crest",
+        "examples/*",
+        "crest/examples/*",
+        # "pinion/examples/*",
         # "signal",
     ]
+        [workspace.package]
+            version = "0.1.0"
+            authors = ["Maxine Alexander <Max.Alexander3721@gmail.com>"]
+            edition = "2021"
+            readme = "README.md"
+            repository = "https://github.com/nucleus-labs/peacock"
+            license = "MIT"
+            keywords = ["css", "xml", "templating", "framework", "cross-platform"]
+            categories = ["gui", "parsing", "template-engine", "web-programming"]
+
         [workspace.dependencies.peacock]
             default-features = true
             version = "0.1.0"
