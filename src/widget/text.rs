@@ -10,7 +10,7 @@ impl TextBuilder {
         }.into()
     }
 
-    pub fn from_node<State: Default + 'static>(ctx: &mut crate::ApplicationContext<State>, node: &peacock_pinion::xml::NodeAsync) -> Result<(), String> {
+    pub fn from_node<State: 'static>(ctx: &mut crate::ApplicationContext<State>, node: &peacock_pinion::xml::NodeAsync) -> Result<(), String> {
         let node_guard = node.read().unwrap();
 
         let node_id = node_guard.get_attribute("Default", "id")
@@ -25,7 +25,7 @@ impl TextBuilder {
     }
 }
 
-impl<State: Default + 'static> super::ElementBuilder<State> for TextBuilder {
+impl<State: 'static> super::ElementBuilder<State> for TextBuilder {
     fn build<'a>(&'a self, _ctx: &'a crate::ApplicationContext<State>) -> crate::Element<'a> {
         iced::widget::text(&self.contents).into()
     }
