@@ -1,13 +1,23 @@
+use peacock_crest::DomElement;
 
 #[derive(Debug)]
-pub struct ContainerBuilder {
-    pub children: Vec<String>,
+pub struct BuilderContainer {
+    children: Vec<String>,
+
+    dom_element_ref: super::DomElementImpl,
+
+    inline_style: peacock_crest::CssStyleProperties,
 }
 
-impl ContainerBuilder {
-    pub fn new(children: Vec<String>) -> Box<Self> {
+impl BuilderContainer {
+    pub fn new(children: Vec<String>, dom_element_ref: super::DomElementImpl) -> Box<Self> {
+        let inline_style = dom_element_ref.get_inline_style();
         Self{
             children,
+
+            dom_element_ref,
+
+            inline_style,
         }.into()
     }
 
@@ -23,14 +33,14 @@ impl ContainerBuilder {
             child_ids.push(child_id);
         }
 
-        let new = Self::new(child_ids);
+        let new = Self::new(child_ids, node.clone().into());
         ctx.widget_registry.insert(node_id, new);
 
         Ok(())
     }
 }
 
-impl<State: 'static> super::ElementBuilder<State> for ContainerBuilder {
+impl<State: 'static> super::ElementBuilder<State> for BuilderContainer {
     fn build<'a>(&'a self, ctx: &'a crate::ApplicationContext<State>) -> crate::Element<'a> {
         let children = self.children.iter()
             .map(|child_id| ctx.get_widget(child_id as &str).unwrap())
@@ -39,7 +49,11 @@ impl<State: 'static> super::ElementBuilder<State> for ContainerBuilder {
         iced::widget::column(children).into()
     }
     
-    fn get_children(&self) -> Vec<String> {
+    fn get_child_ids(&self) -> Vec<String> {
         self.children.clone()
+    }
+    
+    fn get_dom_element(&self) -> super::DomElementImpl {
+        self.dom_element_ref.clone()
     }
 }

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<body route="index">
+    <column>
+        <row>
+            <button id="toggle-nav" hover-text="Open Navigation" data-type="toggle" data-toggle="menu" data-menu-route="navigation">
+                <icon src="static/img/hamburger.svg" />
+            </button>
+            <text id="section-label">Standard</text>
+            <button id="nav-menu-pin" hover-text="Keep on top (Alt+Up)"><icon src="static/img/pin.png" /></button>
+            <button id="nav-menu-history" hover-text="History (Ctrl+H)"><icon src="static/img/history.png" /></button>
+            <button id="toggle-history" hover-text="History (Ctrl+H)" data-type="toggle" data-toggle="menu" data-menu-route="history">
+                <icon src="static/img/history.svg" />
+            </button>
+        </row>
+        <text id="result-buffer" />
+        <text id="current-buffer" />
+        <row>
+            <button id="calc-memory-clear">MC</button>
+            <button id="calc-memory-recall">MR</button>
+            <button id="calc-memory-add">M+</button>
+            <button id="calc-memory-sub">M-</button>
+            <button id="calc-memory-store">MS</button>
+            <button id="toggle-memory" hover-text="Memory" data-type="toggle" data-toggle="menu" data-menu-route="memory">M⮟</button>
+        </row>
+        <row>
+            <button id="calc-op-percent">%</button> <!-- I have no idea what this button does -->
+            <button id="calc-op-clearentry">CE</button>
+            <button id="calc-op-clear">C</button>
+            <button id="calc-op-backspace"><icon src="static/img/backspace.svg" /></button>
+        </row>
+        <row>
+            <button id="calc-op-inverse"><icon src="static/img/inverse.svg" /></button>
+            <button id="calc-op-square"><icon src="static/img/square.svg" /></button>
+            <button id="calc-op-sqrt"><icon src="static/img/sqrt.svg" /></button>
+            <button id="calc-op-divide"><icon src="static/img/divide.svg" /></button>
+        </row>
+        <row>
+            <button id="calc-num-7">7</button>
+            <button id="calc-num-8">8</button>
+            <button id="calc-num-9">9</button>
+            <button id="calc-op-multiply"><icon src="static/img/multiply.svg" /></button>
+        </row>
+        <row>
+            <button id="calc-num-4">4</button>
+            <button id="calc-num-5">5</button>
+            <button id="calc-num-6">6</button>
+            <button id="calc-op-subtract"><icon src="static/img/subtract.svg" /></button>
+        </row>
+        <row>
+            <button id="calc-num-3">3</button>
+            <button id="calc-num-2">2</button>
+            <button id="calc-num-1">1</button>
+            <button id="calc-op-add"><icon src="static/img/add.svg" /></button>
+        </row>
+        <row>
+            <button id="calc-op-negate"><icon src="static/img/negate.svg" /></button>
+            <button id="calc-num-0">0</button>
+            <button id="calc-op-decimal">.</button>
+            <button id="calc-op-equal"><icon src="static/img/equal.svg" /></button>
+        </row>
+    </column>
+</body>

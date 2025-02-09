@@ -12,8 +12,8 @@ fn update_count(ctx: &mut ApplicationContext<MyState>, msg: peacock::message::Me
     // assumption is safe because widgets send their identifier and if they don't exist that
     // would be incredibly problematic...
     let button = ctx.get_widget(&msg.0).unwrap();
-    let button_content_id = button.get_children()[0].clone();
-    let button_content = peacock::widget::text::TextBuilder::new(format!("Clicked {} times!", ctx.get_state().read().unwrap().count));
+    let button_content_id = button.get_child_ids()[0].clone();
+    let button_content = peacock::widget::text::BuilderText::new(format!("Clicked {} times!", ctx.get_state().read().unwrap().count));
     
     ctx.set_widget(button_content_id, button_content);
 }

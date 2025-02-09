@@ -7,6 +7,7 @@ pub mod widget;
 pub mod message;
 
 pub use minijinja::context;
+use peacock_pinion::xml::{NodeAsync, XmlNode};
 
 use std::collections::HashMap;
 use std::sync::{Arc, RwLock};
@@ -28,7 +29,7 @@ pub enum Error {
 }
 
 #[doc = include_str!("../docs/application_context.md")]
-pub struct ApplicationContext<State> {
+pub struct ApplicationContext<State = ()> {
     title: &'static str,
     state: AsyncHandle<State>,
     event_hooks: HashMap<String, AsyncHandle<Vec<Box<message::MessageReceiver<State>>>>>,
@@ -67,7 +68,8 @@ impl<State: 'static> ApplicationContext<State> {
     /// Creates a new context with the given title and provided initial user-defined state object
     pub fn new_with_state(title: &'static str, initial_state: State) -> Self {
         let mut widget_registry: HashMap<String, widget::BoxedElementBuilder<State>> = HashMap::new();
-        widget_registry.insert("pk-root".into(), widget::container::ContainerBuilder::new(Vec::new()));
+        let default_node = NodeAsync(Arc::new(RwLock::new(XmlNode::default())));
+        widget_registry.insert("pk-root".into(), widget::container::BuilderContainer::new(Vec::new(), default_node.into()));
 
         Self{
             title,
@@ -168,10 +170,12 @@ impl<State: 'static> ApplicationContext<State> {
         let node_name = node_guard.name.to_lowercase();
 
         match node_name.as_str() {
-            "button" => widget::button::ButtonBuilder::from_node(self, node)?,
-            "container" => widget::container::ContainerBuilder::from_node(self, node)?,
-            "column" => widget::column::ColumnBuilder::from_node(self, node)?,
-            "text" | "text-content" => widget::text::TextBuilder::from_node(self, node)?,
+            "button" => widget::button::BuilderButton::from_node(self, node)?,
+            "container" => widget::container::BuilderContainer::from_node(self, node)?,
+            "column" => widget::column::BuilderColumn::from_node(self, node)?,
+            "text" | "text-content" => widget::text::BuilderText::from_node(self, node)?,
+            "row" => widget::row::BuilderRow::from_node(self, node)?,
+            "icon" => widget::image::BuilderImage::from_node(self, node)?,
 
             _ => panic!("Unknown element type '{node_name}'")
         };
@@ -183,7 +187,7 @@ impl<State: 'static> ApplicationContext<State> {
     /// Then parse the resulting XML string into a DOM element tree, and convert each of the tree's nodes to
     /// an object implementing the [`widget::ElementBuilder`] trait, with the root element being registered
     /// using `registry_id` as the index
-    pub fn render_template_to_registry(&mut self, template_name: String, registry_id: String, context: minijinja::Value) -> Result {
+    pub fn render_template_to_registry(&mut self, template_name: String, context: minijinja::Value) -> Result {
         let template = self.templates.read().unwrap().get(&template_name);
         let xml = template.read().unwrap().render(context)?;
 
@@ -195,13 +199,26 @@ impl<State: 'static> ApplicationContext<State> {
             tree_guard.append_from_source(template_name, xml)?
         };
 
-        let mut toplevel_ids: Vec<String> = Vec::new();
-        for node in xml_entry.read().unwrap().nodes.iter() {
-            let node_id = self.register_node_as_widget(node)?;
-            toplevel_ids.push(node_id);
-        }
+        
+        let node_handle = xml_entry.read().unwrap();
+        let root_handle = node_handle.root.read().unwrap();
 
-        self.widget_registry.insert(registry_id, widget::container::ContainerBuilder::new(toplevel_ids));
+        match &root_handle.name.to_lowercase() as &str {
+            "body" => {
+                let registry_id = root_handle.get_attribute("Default", "route").expect("Root XML objects are required to have a 'route' attribute! See <url> for more information");
+                let mut children: Vec<String> = Vec::new();
+                for node in root_handle.children.iter() {
+                    children.push(self.register_node_as_widget(node)?);
+                }
+                let default_node = NodeAsync(Arc::new(RwLock::new(XmlNode::default())));
+                let root_container = widget::container::BuilderContainer::new(children, default_node.into());
+        
+                self.widget_registry.insert(registry_id, root_container);
+            },
+            "modal" => return Err(Error::Generic("Modals are not yet implemented!".into())),
+
+            _ => return Err(Error::Generic("Root object is required to be 'body' or 'modal'!".into())),
+        }
 
         Ok(())
     }
@@ -247,12 +264,3 @@ impl<State: 'static> ApplicationContext<State> {
 }
 
 impl std::error::Error for Error {}
-
-impl<State: 'static> std::default::Default for ApplicationContext<State>
-where
-    State: Default
-{
-    fn default() -> Self {
-        Self::new("peacock app")
-    }
-}

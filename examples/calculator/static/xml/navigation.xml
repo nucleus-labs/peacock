@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<menu route="navigation" update-policy="static">
+    <dropdown id="navigation">
+        <text class="section">Calculator</text>
+        <menuitem>Standard</menuitem>
+        <menuitem>Programmer</menuitem>
+        <hr />
+        <menuitem>Settings</menuitem>
+    </dropdown>
+</menu>
